@@ -26,6 +26,6 @@ public class InventoryController {
 
     @PostMapping
     public void createInventory(@RequestBody InventoryDto inventoryDto) {
-        System.out.println("DTO: " + inventoryDto.toString());
+        inventoryService.createInventory(inventoryDto);
     }
 }
