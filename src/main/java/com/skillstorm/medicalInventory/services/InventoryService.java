@@ -25,14 +25,19 @@ public class InventoryService {
     }
 
     public void createInventory(InventoryDto inventoryDto) {
+        String itemName = inventoryDto.getItemName();
+
         InventoryPK inventoryPK = new InventoryPK();
         Inventory newInventory = new Inventory();
 
-        Item foundItem = itemService.getItemByName(inventoryDto.getItemName());
+        Item foundItem = itemService.getItemByName(itemName);
         if (foundItem == null) {
+            Item newItem = new Item(itemName);
+            System.out.println("ITEM: " + newItem.toString());
+            itemService.saveItem(newItem);
             System.out.println("no item");
         } else {
-            System.out.println(foundItem.toString());
+            System.out.println("this is where item added to warehouse");
         }
 
     }
