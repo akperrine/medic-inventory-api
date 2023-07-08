@@ -22,6 +22,9 @@ public class InventoryService {
     @Autowired
     WarehouseService warehouseService;
 
+    private boolean checkQuantityBelowCapcity(int quantity, int capacity) {
+        return quantity <= capacity;
+    }
 
     public List<Inventory> findAll() {
         return inventoryRepository.findAll();
@@ -30,6 +33,12 @@ public class InventoryService {
     public Inventory createInventory(InventoryDto inventoryDto) {
         String itemName = inventoryDto.getItemName();
         int warehouseId = inventoryDto.getWarehouseId();
+        if(!checkQuantityBelowCapcity(inventoryDto.getQuantity(), inventoryDto.getMaxCapacity())) {
+            // implement an error for if quantit
+            return null;
+        }
+
+
         Warehouse warehouse = warehouseService.findById(warehouseId);
         if(warehouse == null) return null;
 
@@ -61,6 +70,12 @@ public class InventoryService {
     public Inventory updateInventory(int itemId, InventoryDto inventoryDto) {
         //Create PK from the Composite key class;
         InventoryPK inventoryPK = new InventoryPK(itemId, inventoryDto.getWarehouseId());
+
+        if(!checkQuantityBelowCapcity(inventoryDto.getQuantity(), inventoryDto.getMaxCapacity())) {
+            // implement an error for if quantity
+            System.out.println("inappropriate quantity");
+            return null;
+        }
 
         // Retrieve the inventory that will be updated
         Inventory inventoryToUpdate = inventoryRepository.findById(inventoryPK).orElse(null);
