@@ -8,7 +8,7 @@ public class Item {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long itemId;
+    private int itemId;
 
     @Column(nullable = false)
     private String itemName;
@@ -20,11 +20,11 @@ public class Item {
         this.itemName = itemName;
     }
 
-    public Long getItemId() {
+    public int getItemId() {
         return itemId;
     }
 
-    public void setItemId(Long itemId) {
+    public void setItemId(int itemId) {
         this.itemId = itemId;
     }
 
