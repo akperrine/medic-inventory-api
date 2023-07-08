@@ -26,6 +26,7 @@ public class InventoryController {
 
     @PostMapping
     public ResponseEntity<Inventory> createInventory(@RequestBody InventoryDto inventoryDto) {
+        System.out.println(inventoryDto.toString());
         Inventory newInventory = inventoryService.createInventory(inventoryDto);
 
         try {
@@ -36,4 +37,15 @@ public class InventoryController {
     }
 
     //Controller to Edit Inventory/ Update the count
+    @PutMapping("/{itemId}")
+    public ResponseEntity<Inventory> updateInventory(@PathVariable int itemId, @RequestBody InventoryDto inventoryDto) {
+        System.out.println(inventoryDto.toString());
+        Inventory updatedInventory = inventoryService.updateInventory( itemId, inventoryDto);
+
+        try {
+            return new ResponseEntity<>(updatedInventory, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }

@@ -49,11 +49,28 @@ public class InventoryService {
         inventoryPK.setWarehouse(warehouseId);
 
         // Set the new Inventory
+        System.out.println(inventoryDto.getMaxCapacity());
         newInventory.setItem(foundItem);
         newInventory.setWarehouse(warehouse);
         newInventory.setQuantity(inventoryDto.getQuantity());
         newInventory.setMaxCapacity(inventoryDto.getMaxCapacity());
 
         return inventoryRepository.save(newInventory);
+    }
+
+    public Inventory updateInventory(int itemId, InventoryDto inventoryDto) {
+        //Create PK from the Composite key class;
+        InventoryPK inventoryPK = new InventoryPK(itemId, inventoryDto.getWarehouseId());
+
+        // Retrieve the inventory that will be updated
+        Inventory inventoryToUpdate = inventoryRepository.findById(inventoryPK).orElse(null);
+        if (inventoryToUpdate == null) return null;
+
+        // Update the inventory
+        inventoryToUpdate.setQuantity(inventoryDto.getQuantity());
+        inventoryToUpdate.setMaxCapacity(inventoryDto.getMaxCapacity());
+
+        // save the updated inventory and return
+        return inventoryRepository.save(inventoryToUpdate);
     }
 }

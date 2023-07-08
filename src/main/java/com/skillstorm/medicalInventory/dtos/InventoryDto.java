@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class InventoryDto {
     private int warehouseId;
-
     private int itemId;
     private String itemName;
     private int quantity;
