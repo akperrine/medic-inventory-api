@@ -39,11 +39,20 @@ public class InventoryController {
     //Controller to Edit Inventory/ Update the count
     @PutMapping("/{itemId}")
     public ResponseEntity<Inventory> updateInventory(@PathVariable int itemId, @RequestBody InventoryDto inventoryDto) {
-        System.out.println(inventoryDto.toString());
         Inventory updatedInventory = inventoryService.updateInventory( itemId, inventoryDto);
 
         try {
             return new ResponseEntity<>(updatedInventory, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("/{itemId}/{warehouseId}")
+    public ResponseEntity<Inventory> deleteInventory(@PathVariable int itemId, @PathVariable int warehouseId) {
+        Inventory deletedInventory = inventoryService.deleteInventory(itemId, warehouseId);
+        try {
+            return new ResponseEntity<>(deletedInventory, HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

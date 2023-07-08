@@ -88,4 +88,15 @@ public class InventoryService {
         // save the updated inventory and return
         return inventoryRepository.save(inventoryToUpdate);
     }
+
+    public Inventory deleteInventory(int itemId, int warehouseId) {
+        InventoryPK inventoryPK = new InventoryPK(itemId, warehouseId);
+
+        System.out.println(inventoryPK.toString());
+        Inventory inventoryToDelete = inventoryRepository.findById(inventoryPK).orElse(null);
+        if (inventoryToDelete == null) return null;
+
+        inventoryRepository.delete(inventoryToDelete);
+        return inventoryToDelete;
+    }
 }
