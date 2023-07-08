@@ -27,11 +27,11 @@ public class InventoryService {
         return inventoryRepository.findAll();
     }
 
-    public void createInventory(InventoryDto inventoryDto) {
+    public Inventory createInventory(InventoryDto inventoryDto) {
         String itemName = inventoryDto.getItemName();
         int warehouseId = inventoryDto.getWarehouseId();
         Warehouse warehouse = warehouseService.findById(warehouseId);
-        if(warehouse == null) return;
+        if(warehouse == null) return null;
 
         // Initialize new Inventory and PK id class
         InventoryPK inventoryPK = new InventoryPK();
@@ -42,13 +42,11 @@ public class InventoryService {
             Item newItem = new Item(itemName);
             itemService.saveItem(newItem);
             foundItem = newItem;
-            System.out.println("heres the new item: "+ foundItem.toString());
         }
 
         // Set PK made of composite Key
         inventoryPK.setItem(foundItem.getItemId());
         inventoryPK.setWarehouse(warehouseId);
-        System.out.println(inventoryPK.toString());
 
         // Set the new Inventory
         newInventory.setItem(foundItem);
@@ -56,7 +54,6 @@ public class InventoryService {
         newInventory.setQuantity(inventoryDto.getQuantity());
         newInventory.setMaxCapacity(inventoryDto.getMaxCapacity());
 
-        inventoryRepository.save(newInventory);
-        System.out.println(newInventory.toString());
+        return inventoryRepository.save(newInventory);
     }
 }

@@ -25,7 +25,15 @@ public class InventoryController {
     }
 
     @PostMapping
-    public void createInventory(@RequestBody InventoryDto inventoryDto) {
-        inventoryService.createInventory(inventoryDto);
+    public ResponseEntity<Inventory> createInventory(@RequestBody InventoryDto inventoryDto) {
+        Inventory newInventory = inventoryService.createInventory(inventoryDto);
+
+        try {
+            return new ResponseEntity<>(newInventory, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
+
+    //Controller to Edit Inventory/ Update the count
 }
