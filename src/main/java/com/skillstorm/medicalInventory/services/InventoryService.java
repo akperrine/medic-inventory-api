@@ -22,16 +22,25 @@ public class InventoryService {
     @Autowired
     WarehouseService warehouseService;
 
+    private boolean checkQuantityBelowCapcity(int quantity, int capacity) {
+        return quantity <= capacity;
+    }
 
     public List<Inventory> findAll() {
         return inventoryRepository.findAll();
     }
 
-    public void createInventory(InventoryDto inventoryDto) {
+    public Inventory createInventory(InventoryDto inventoryDto) {
         String itemName = inventoryDto.getItemName();
         int warehouseId = inventoryDto.getWarehouseId();
+        if(!checkQuantityBelowCapcity(inventoryDto.getQuantity(), inventoryDto.getMaxCapacity())) {
+            // implement an error for if quantit
+            return null;
+        }
+
+
         Warehouse warehouse = warehouseService.findById(warehouseId);
-        if(warehouse == null) return;
+        if(warehouse == null) return null;
 
         // Initialize new Inventory and PK id class
         InventoryPK inventoryPK = new InventoryPK();
@@ -42,21 +51,41 @@ public class InventoryService {
             Item newItem = new Item(itemName);
             itemService.saveItem(newItem);
             foundItem = newItem;
-            System.out.println("heres the new item: "+ foundItem.toString());
         }
 
         // Set PK made of composite Key
         inventoryPK.setItem(foundItem.getItemId());
         inventoryPK.setWarehouse(warehouseId);
-        System.out.println(inventoryPK.toString());
 
         // Set the new Inventory
+        System.out.println(inventoryDto.getMaxCapacity());
         newInventory.setItem(foundItem);
         newInventory.setWarehouse(warehouse);
         newInventory.setQuantity(inventoryDto.getQuantity());
         newInventory.setMaxCapacity(inventoryDto.getMaxCapacity());
 
-        inventoryRepository.save(newInventory);
-        System.out.println(newInventory.toString());
+        return inventoryRepository.save(newInventory);
+    }
+
+    public Inventory updateInventory(int itemId, InventoryDto inventoryDto) {
+        //Create PK from the Composite key class;
+        InventoryPK inventoryPK = new InventoryPK(itemId, inventoryDto.getWarehouseId());
+
+        if(!checkQuantityBelowCapcity(inventoryDto.getQuantity(), inventoryDto.getMaxCapacity())) {
+            // implement an error for if quantity
+            System.out.println("inappropriate quantity");
+            return null;
+        }
+
+        // Retrieve the inventory that will be updated
+        Inventory inventoryToUpdate = inventoryRepository.findById(inventoryPK).orElse(null);
+        if (inventoryToUpdate == null) return null;
+
+        // Update the inventory
+        inventoryToUpdate.setQuantity(inventoryDto.getQuantity());
+        inventoryToUpdate.setMaxCapacity(inventoryDto.getMaxCapacity());
+
+        // save the updated inventory and return
+        return inventoryRepository.save(inventoryToUpdate);
     }
 }
