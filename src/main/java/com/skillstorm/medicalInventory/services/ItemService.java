@@ -16,4 +16,11 @@ public class ItemService {
     public List<Item> findAllItems() {
         return itemRepository.findAll();
     }
+
+    public Item getItemByName(String name) {
+        Item foundItem = itemRepository.findByItemName(name);
+        return foundItem;
+    }
+
+    public Item saveItem(Item item) {return itemRepository.save(item);}
 }

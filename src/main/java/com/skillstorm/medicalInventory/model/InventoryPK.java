@@ -42,4 +42,12 @@ public class InventoryPK implements Serializable {
     public void setWarehouse(int warehouse) {
         this.warehouse = warehouse;
     }
+
+    @Override
+    public String toString() {
+        return "InventoryPK{" +
+                "item=" + item +
+                ", warehouse=" + warehouse +
+                '}';
+    }
 }

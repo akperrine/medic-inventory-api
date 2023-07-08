@@ -1,5 +1,7 @@
 package com.skillstorm.medicalInventory.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -14,6 +16,7 @@ public class Inventory {
     private Item item;
 
     @Id
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "warehouse_id")
     private Warehouse warehouse;
@@ -67,8 +70,7 @@ public class Inventory {
     @Override
     public String toString() {
         return "Inventory{" +
-//                "item=" + item +
-//                ", warehouse=" + warehouse +
+                "item=" + item +
                 ", quantity=" + quantity +
                 ", maxCapacity=" + maxCapacity +
                 '}';
