@@ -26,6 +26,14 @@ public class InventoryService {
         return quantity <= capacity;
     }
 
+    private Inventory getInventoryPK(int itemId, int warehouseId) {
+        InventoryPK inventoryPK = new InventoryPK(itemId, warehouseId);
+
+        Inventory inventoryToFind = inventoryRepository.findById(inventoryPK).orElse(null);
+        if (inventoryToFind == null) return null;
+        return inventoryToFind;
+    }
+
     public List<Inventory> findAll() {
         return inventoryRepository.findAll();
     }
@@ -68,8 +76,6 @@ public class InventoryService {
     }
 
     public Inventory updateInventory(int itemId, InventoryDto inventoryDto) {
-        //Create PK from the Composite key class;
-        InventoryPK inventoryPK = new InventoryPK(itemId, inventoryDto.getWarehouseId());
 
         if(!checkQuantityBelowCapcity(inventoryDto.getQuantity(), inventoryDto.getMaxCapacity())) {
             // implement an error for if quantity
@@ -78,8 +84,7 @@ public class InventoryService {
         }
 
         // Retrieve the inventory that will be updated
-        Inventory inventoryToUpdate = inventoryRepository.findById(inventoryPK).orElse(null);
-        if (inventoryToUpdate == null) return null;
+        Inventory inventoryToUpdate = getInventoryPK(itemId, inventoryDto.getWarehouseId());
 
         // Update the inventory
         inventoryToUpdate.setQuantity(inventoryDto.getQuantity());
@@ -88,4 +93,13 @@ public class InventoryService {
         // save the updated inventory and return
         return inventoryRepository.save(inventoryToUpdate);
     }
+
+    public Inventory deleteInventory(int itemId, int warehouseId) {
+        Inventory inventoryToDelete = getInventoryPK(itemId, warehouseId);
+        if (inventoryToDelete == null) return null;
+
+        inventoryRepository.delete(inventoryToDelete);
+        return inventoryToDelete;
+    }
+
 }
