@@ -1,8 +1,11 @@
 package com.skillstorm.medicalInventory.services;
 
+import com.skillstorm.medicalInventory.model.Inventory;
 import com.skillstorm.medicalInventory.model.Warehouse;
+import com.skillstorm.medicalInventory.repositories.InventoryRepository;
 import com.skillstorm.medicalInventory.repositories.WarehouseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +16,9 @@ public class WarehouseService {
 
     @Autowired
     WarehouseRepository warehouseRepository;
+    @Autowired
+    InventoryRepository inventoryRepository;
+
     public List<Warehouse> findAll() {
         return warehouseRepository.findAll();
     }
@@ -29,8 +35,14 @@ public class WarehouseService {
         return warehouseRepository.save(warehouse);
     }
 
-    public void deleteWarehouse(int warehouseId) {
+    public ResponseEntity<String> deleteWarehouse(int warehouseId) {
+
+        Warehouse warehouse = findById(warehouseId);
+        List<Inventory> inventoryList = inventoryRepository.findByWarehouse(warehouse);
+        inventoryRepository.deleteAll(inventoryList);
         warehouseRepository.deleteById(warehouseId);
+
+        return ResponseEntity.ok("Warehouse Deleted");
     }
 
 }
