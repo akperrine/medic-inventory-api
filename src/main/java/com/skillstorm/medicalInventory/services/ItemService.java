@@ -18,6 +18,7 @@ public class ItemService {
     }
 
     public Item getItemByName(String name) {
+        // Checks for Item
         Item foundItem = itemRepository.findByItemName(name);
         return foundItem;
     }

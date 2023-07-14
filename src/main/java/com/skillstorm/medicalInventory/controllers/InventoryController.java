@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/inventory")
 public class InventoryController {
@@ -18,6 +18,7 @@ public class InventoryController {
     @Autowired
     InventoryService inventoryService;
 
+    //Gets all Inventories
     @GetMapping
     public ResponseEntity<List<Inventory>> findAllInventory() {
         List<Inventory> inventories =  inventoryService.findAll();
@@ -25,6 +26,7 @@ public class InventoryController {
         return new ResponseEntity<List<Inventory>>(inventories, HttpStatus.OK);
     }
 
+    // Adds new Inventory
     @PostMapping
     public ResponseEntity<Inventory> createInventory(@RequestBody InventoryDto inventoryDto) {
         System.out.println(inventoryDto.toString());
@@ -37,7 +39,7 @@ public class InventoryController {
         }
     }
 
-    //Controller to Edit Inventory/ Update the count
+    // Updates single Inventory
     @PutMapping("/{itemId}")
     public ResponseEntity<Inventory> updateInventory(@PathVariable int itemId, @RequestBody InventoryDto inventoryDto) {
         Inventory updatedInventory = inventoryService.updateInventory( itemId, inventoryDto);
@@ -49,6 +51,7 @@ public class InventoryController {
         }
     }
 
+    // Deletes an inventory
     @DeleteMapping("/{itemId}/{warehouseId}")
     public ResponseEntity<Inventory> deleteInventory(@PathVariable int itemId, @PathVariable int warehouseId) {
         Inventory deletedInventory = inventoryService.deleteInventory(itemId, warehouseId);

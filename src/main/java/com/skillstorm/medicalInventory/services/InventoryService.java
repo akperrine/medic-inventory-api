@@ -27,8 +27,10 @@ public class InventoryService {
     }
 
     private Inventory getInventoryPK(int itemId, int warehouseId) {
+        // Generate new PK from composite key of itemId and warehouseId
         InventoryPK inventoryPK = new InventoryPK(itemId, warehouseId);
 
+        //Check if inventory exists, and if does, retrieve that inventory
         Inventory inventoryToFind = inventoryRepository.findById(inventoryPK).orElse(null);
         if (inventoryToFind == null) return null;
         return inventoryToFind;

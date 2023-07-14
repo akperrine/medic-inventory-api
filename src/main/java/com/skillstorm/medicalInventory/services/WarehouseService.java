@@ -24,6 +24,7 @@ public class WarehouseService {
     }
     public Warehouse findById(int id) {
         System.out.println(id);
+        // Find warehouse by id and unwrap Optional
         Optional<Warehouse> optionalWarehouse = warehouseRepository.findById(id);
         if(optionalWarehouse.isPresent()) {
           return optionalWarehouse.get();
@@ -38,6 +39,8 @@ public class WarehouseService {
     public ResponseEntity<String> deleteWarehouse(int warehouseId) {
 
         Warehouse warehouse = findById(warehouseId);
+
+        //Find all Inventory in Warehouse and delete them before deleting warehouse
         List<Inventory> inventoryList = inventoryRepository.findByWarehouse(warehouse);
         inventoryRepository.deleteAll(inventoryList);
         warehouseRepository.deleteById(warehouseId);
