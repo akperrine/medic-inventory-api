@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/warehouse")
 public class WarehouseController {
@@ -36,7 +37,7 @@ public class WarehouseController {
         return new ResponseEntity<>(newWarehouse, HttpStatus.OK);
     }
 
-    @PutMapping()
+    @PutMapping("/update")
     public  ResponseEntity<Warehouse> updateWarehouse(@RequestBody Warehouse warehouse) {
         System.out.println(warehouse.toString());
         Warehouse newWarehouse = warehouseService.saveWarehouse(warehouse);
